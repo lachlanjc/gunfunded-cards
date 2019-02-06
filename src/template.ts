@@ -3,14 +3,15 @@ import { sanitizeHtml } from './sanitizer'
 
 function getCss(theme: string, fontSize: string) {
   let background = '#ffffff'
-  let foreground = '#e42d42'
+  // let foreground = '#e42d42'
   let radial = '#dde1e4'
 
   if (theme === 'dark') {
     background = '#17171d'
-    foreground = '#ffffff'
+    // foreground = '#ffffff'
     radial = '#606e77'
   }
+
   return `
     @font-face {
       font-family: 'Phantom Sans';
