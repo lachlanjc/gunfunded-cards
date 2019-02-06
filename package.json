@@ -1,16 +1,17 @@
 {
-  "name": "og-image",
+  "name": "hackclub-workshopcards",
   "version": "1.0.0",
-  "description": "Generate an open graph image for twitter/facebook/etc",
+  "description": "Generate Open Graph images for Hack Club Workshops",
   "main": "dist/card.js",
+  "private": true,
   "scripts": {
     "start": "node dist/card.js",
     "build": "tsc",
     "now-build": "tsc",
     "watch": "tsc --watch"
   },
-  "author": "styfle",
-  "repository": "github:styfle/og-image",
+  "author": "lachlanjc <lachlan@hackclub.com>",
+  "repository": "github:hackclub/workshop-cards",
   "license": "MIT",
   "dependencies": {
     "chrome-aws-lambda": "1.11.1",

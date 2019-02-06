@@ -1,6 +1,6 @@
 # Contributing
 
-There are two pieces to `og-image` that are worth noting before you begin development.
+There are two pieces to this project that are worth noting before you begin development.
 
 1. The backend image generator located in [/src/card.ts](https://github.com/styfle/og-image/blob/master/src/card.ts)
 2. The frontend inputs located in [/src/browser.ts](https://github.com/styfle/og-image/blob/master/src/browser.ts)
@@ -14,4 +14,4 @@ However, local development requires a few steps.
 3. Run the frontend with `npx http-server .` and visit http://localhost:8080/public/index.html
 4. If necessary, edit the `exePath` in [options.ts](https://github.com/styfle/og-image/blob/master/src/options.ts) to point to your local Chrome executable
 
-Now you're ready to start local development!
+Now you’re ready to start local development!
