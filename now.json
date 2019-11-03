@@ -16,7 +16,7 @@
     { "src": "/", "dest": "/public/index.html" },
     { "src": "/favicon.ico", "dest": "/public/favicon.ico" },
     { "src": "/style.css", "dest": "/public/style.css" },
-    { "src": "/dist/browser.js", "dest": "/browser.js" },
+    { "src": "/dist/browser.js", "dest": "/public/dist/browser.js" },
     { "src": "/(.+)", "dest": "/src/card.ts" }
   ]
 }
