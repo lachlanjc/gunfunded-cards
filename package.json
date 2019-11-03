@@ -14,13 +14,11 @@
   "repository": "github:lachlanjc/ima-cards",
   "license": "MIT",
   "dependencies": {
-    "chrome-aws-lambda": "1.11.1",
-    "marked": "^0.6.0",
-    "puppeteer-core": "1.11.0"
+    "chrome-aws-lambda": "^2.0.0",
+    "puppeteer-core": "^2.0.0"
   },
   "devDependencies": {
-    "@types/marked": "^0.6.0",
     "@types/puppeteer-core": "^1.9.0",
-    "typescript": "^3.2.4"
+    "typescript": "^3.6.4"
   }
 }
