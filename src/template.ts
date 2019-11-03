@@ -1,4 +1,3 @@
-import * as marked from 'marked'
 import { sanitizeHtml } from './sanitizer'
 
 function getCss(theme: string, fontSize: string) {
@@ -110,7 +109,7 @@ function getCss(theme: string, fontSize: string) {
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-  const { text, metadata, theme, md, fontSize, images } = parsedReq
+  const { text, metadata, theme, fontSize, images } = parsedReq
   return `<!DOCTYPE html>
 <html>
   <meta charset="utf-8">
@@ -137,7 +136,7 @@ export function getHtml(parsedReq: ParsedRequest) {
         </div>`
           : ''
       }
-      <div class="heading">${md ? marked(text) : sanitizeHtml(text)}</div>
+      <div class="heading">${sanitizeHtml(text)}</div>
       ${metadata != undefined ? `<div class="metadata">${metadata}</div>` : ''}
     </div>
   </body>
