@@ -1,6 +1,5 @@
 {
   "name": "lachlanjc-ima-cards",
-  "alias": "lachlanjc-ima-cards.now.sh",
   "version": 2,
   "regions": ["all"],
   "public": true,
