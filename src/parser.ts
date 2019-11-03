@@ -4,7 +4,7 @@ import { parse } from 'url'
 export function parseRequest(req: IncomingMessage) {
   const { pathname = '/', query = {} } = parse(req.url || '', true)
   console.log('HTTP', pathname, query)
-  const { author, fontSize, images, theme, md } = query
+  const { metadata, fontSize, images, theme, md } = query
   if (Array.isArray(fontSize)) {
     throw new Error('Expected a single fontSize')
   }
@@ -26,7 +26,7 @@ export function parseRequest(req: IncomingMessage) {
 
   const parsedRequest: ParsedRequest = {
     fileType: extension === 'jpeg' ? extension : 'png',
-    author: decodeURIComponent(author as string),
+    metadata: decodeURIComponent(metadata as string),
     text: decodeURIComponent(text),
     theme: theme === 'dark' ? 'dark' : 'light',
     md: md === '1' || md === 'true',

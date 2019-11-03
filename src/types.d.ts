@@ -4,7 +4,7 @@ type Theme = 'light' | 'dark'
 interface ParsedRequest {
   fileType: FileType
   text: string
-  author: string
+  metadata: string
   theme: Theme
   md: boolean
   fontSize: string

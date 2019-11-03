@@ -13,37 +13,20 @@ function getCss(theme: string, fontSize: string) {
   }
 
   return `
-    @font-face {
-      font-family: 'Phantom Sans';
-      src: url('https://hackclub.com/fonts/Phantom_Sans_0.4/Regular.woff')
-          format('woff'),
-        url('https://hackclub.com/fonts/Phantom_Sans_0.4/Regular.woff2')
-          format('woff2');
-      font-weight: normal;
-      font-style: normal;
-    }
-    @font-face {
-      font-family: 'Phantom Sans';
-      src: url('https://hackclub.com/fonts/Phantom_Sans_0.4/Bold.woff')
-          format('woff'),
-        url('https://hackclub.com/fonts/Phantom_Sans_0.4/Bold.woff2')
-          format('woff2');
-      font-weight: bold;
-      font-style: normal;
-    }
-
     body {
       background: ${background};
-      background-image: radial-gradient(${radial} 5%, transparent 0);
-      background-size: 60px 60px;
+      background-image: radial-gradient(circle at 25px 25px, ${radial} 3%, transparent 0%),   
+        radial-gradient(circle at 75px 75px, ${radial} 3%, transparent 0%);
+      background-size: 100px 100px;
       height: 100vh;
       display: flex;
       text-align: center;
       align-items: center;
       justify-content: center;
-      font-family: 'Phantom Sans', sans-serif;
+      font-family: 'Gotham A', 'Gotham B', sans-serif;
       font-size: ${sanitizeHtml(fontSize)};
       font-style: normal;
+      letter-spacing: -.01em;
     }
 
     code {
@@ -75,47 +58,48 @@ function getCss(theme: string, fontSize: string) {
     }
 
     .spacer {
-      margin: 50px 150px 150px;
+      margin: 100px 150px 150px;
     }
 
     .brand {
-      color: #e42d42;
-      display: block;
-      font-size: 100px;
-      font-weight: bold;
+      font-size: 85px;
       padding: 50px;
       text-align: center;
-      text-transform: uppercase;
       position: absolute;
       top: 0;
       width: 100%;
-    }
-
-    .subbrand {
       color: #7a8c97;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nyu {
+      color: ${theme === 'dark' ? '#8900e1' : '#57068c'};
+      font-weight: bold;
+      font-size: 100px;
+      padding-left: .25em;
     }
     
     .heading {
-      background-image: linear-gradient(to bottom right, #e4732d 12.5%, #e42d42);
+      background-image: linear-gradient(to bottom right, #8900e1 12.5%, #57068c);
       background-repeat: no-repeat;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 50px 100px 25px;
+      margin: 50px 100px 45px;
       font-weight: bold;
       line-height: 0.875;
+      letter-spacing: -.06em;
     }
 
     .heading * {
       margin: 0;
     }
-    
-    .author {
+
+    .metadata {
       font-size: ${Number(sanitizeHtml(fontSize).match(/\d+/)) * 0.375}px;
       text-transform: uppercase;
       color: #7a8c97;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      letter-spacing: 0;
     }
     
     .avatar {
@@ -126,9 +110,7 @@ function getCss(theme: string, fontSize: string) {
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-  const { text, author, theme, md, fontSize, images } = parsedReq
-  const username = (author || '').replace('@', '')
-  const avatar = username !== author && `https://github.com/${username}.png`
+  const { text, metadata, theme, md, fontSize, images } = parsedReq
   return `<!DOCTYPE html>
 <html>
   <meta charset="utf-8">
@@ -137,8 +119,12 @@ export function getHtml(parsedReq: ParsedRequest) {
   <style>
     ${getCss(theme, fontSize)}
   </style>
+  <link rel="stylesheet" href="http://assets.lachlanjc.me/bf566c6457ac/gotham.css" />
   <body>
-    <div class="brand">Hack Club <span class="subbrand">Workshops</span></div>
+    <div class="brand">
+      <img class="avatar" src="https://github.com/lachlanjc.png">
+      @lachlanjc @ <span class="nyu">IMA</span>
+    </div>
     <div class="spacer">
       ${
         images.length > 0
@@ -152,13 +138,7 @@ export function getHtml(parsedReq: ParsedRequest) {
           : ''
       }
       <div class="heading">${md ? marked(text) : sanitizeHtml(text)}</div>
-      ${
-        username.length > 0
-          ? `<div class="author">
-          By ${avatar ? `<img class="avatar" src="${avatar}">` : ''} ${username}
-        </div>`
-          : ''
-      }
+      ${metadata != undefined ? `<div class="metadata">${metadata}</div>` : ''}
     </div>
   </body>
 </html>`

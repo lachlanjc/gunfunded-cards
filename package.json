@@ -1,17 +1,17 @@
 {
-  "name": "hackclub-workshopcards",
+  "name": "ima-cards",
   "version": "1.0.0",
-  "description": "Generate Open Graph images for Hack Club Workshops",
+  "description": "Generate Open Graph images for @lachlanjc/ima",
   "main": "dist/card.js",
   "private": true,
   "scripts": {
-    "start": "node dist/card.js",
+    "start": "node public/dist/card.js",
     "build": "tsc",
     "now-build": "tsc",
     "watch": "tsc --watch"
   },
   "author": "lachlanjc <lachlan@hackclub.com>",
-  "repository": "github:hackclub/workshop-cards",
+  "repository": "github:lachlanjc/ima-cards",
   "license": "MIT",
   "dependencies": {
     "chrome-aws-lambda": "1.11.1",

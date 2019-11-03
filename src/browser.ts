@@ -170,7 +170,7 @@ const App = (_: any, state: AppState, setState: SetState) => {
     theme = 'light',
     md = false,
     text = 'Hello World',
-    author = '@lachlanjc',
+    metadata = '@lachlanjc',
     images = [],
     showToast = false,
     messageToast = '',
@@ -186,7 +186,7 @@ const App = (_: any, state: AppState, setState: SetState) => {
   url.pathname = `${encodeURIComponent(text)}.${fileType}`
   url.searchParams.append('theme', theme)
   url.searchParams.append('md', mdValue)
-  url.searchParams.append('author', author)
+  url.searchParams.append('metadata', metadata)
   url.searchParams.append('fontSize', fontSize)
   for (let image of images) {
     url.searchParams.append('images', image)
@@ -243,12 +243,12 @@ const App = (_: any, state: AppState, setState: SetState) => {
           })
         }),
         H(Field, {
-          label: 'Author Input',
+          label: 'Metadata Input',
           input: H(TextInput, {
-            value: author,
+            value: metadata,
             oninput: (val: string) => {
-              console.log('oninput author ' + val)
-              setLoadingState({ author: val })
+              console.log('oninput metadata ' + val)
+              setLoadingState({ metadata: val })
             }
           })
         }),
