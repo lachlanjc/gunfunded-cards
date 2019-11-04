@@ -154,7 +154,11 @@ export function getHtml(parsedReq: ParsedRequest) {
       <div class="heading">${emojify(
         md ? marked(text) : sanitizeHtml(text)
       )}</div>
-      <div class="caption">${emojify(sanitizeHtml(caption))}</div>
+      ${
+        caption
+          ? `<div class="caption">${emojify(sanitizeHtml(caption))}</div>`
+          : ''
+      }
     </div>
   </body>
 </html>`
