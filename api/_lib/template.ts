@@ -1,14 +1,17 @@
+import marked from 'marked'
 import { sanitizeHtml } from './sanitizer'
+import { ParsedRequest } from './types'
+const twemoji = require('twemoji')
+const twOptions = { folder: 'svg', ext: '.svg' }
+const emojify = (text: string) => twemoji.parse(text, twOptions)
 
 function getCss(theme: string, fontSize: string) {
   let background = '#ffffff'
-  // let foreground = '#e42d42'
   let radial = '#dde1e4'
 
   if (theme === 'dark') {
     background = '#17171d'
-    // foreground = '#ffffff'
-    radial = '#606e77'
+    radial = '#3c4858'
   }
 
   return `
@@ -30,7 +33,7 @@ function getCss(theme: string, fontSize: string) {
 
     code {
       font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, sans-serif;
-      font-size: .75em;
+      font-size: .875em;
       white-space: pre-wrap;
     }
 
@@ -61,7 +64,7 @@ function getCss(theme: string, fontSize: string) {
     }
 
     .brand {
-      font-size: 85px;
+      font-size: 90px;
       padding: 50px;
       text-align: center;
       position: absolute;
@@ -73,14 +76,18 @@ function getCss(theme: string, fontSize: string) {
       justify-content: center;
     }
     .nyu {
-      color: ${theme === 'dark' ? '#8900e1' : '#57068c'};
+      color: ${theme === 'dark' ? '#c975ff' : '#57068c'};
       font-weight: bold;
       font-size: 100px;
       padding-left: .25em;
     }
     
     .heading {
-      background-image: linear-gradient(to bottom right, #8900e1 12.5%, #57068c);
+      ${
+        theme === 'dark'
+          ? 'background-image: linear-gradient(to bottom right, #c975ff, #8900e1);'
+          : 'background-image: linear-gradient(to bottom right, #8900e1 12.5%, #57068c);'
+      };
       background-repeat: no-repeat;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -104,19 +111,26 @@ function getCss(theme: string, fontSize: string) {
     .avatar {
       width: 125px;
       border-radius: 125px;
-      margin: 0 25px 0 50px;
+      margin: 0 50px;
+    }
+    
+    .emoji {
+      height: 1em;
+      width: 1em;
+      margin: 0 .05em 0 .1em;
+      vertical-align: -0.1em;
     }`
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-  const { text, metadata, theme, fontSize, images } = parsedReq
+  const { text, theme, md, fontSize, images, metadata } = parsedReq
   return `<!DOCTYPE html>
-<html>
+  <html>
   <meta charset="utf-8">
   <title>Generated Image</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    ${getCss(theme, fontSize)}
+      ${getCss(theme, fontSize)}
   </style>
   <link rel="stylesheet" href="http://assets.lachlanjc.me/bf566c6457ac/gotham.css" />
   <body>
@@ -136,7 +150,7 @@ export function getHtml(parsedReq: ParsedRequest) {
         </div>`
           : ''
       }
-      <div class="heading">${sanitizeHtml(text)}</div>
+      <div class="heading">${emojify(md ? marked(text) : sanitizeHtml(text))}
       ${metadata != undefined ? `<div class="metadata">${metadata}</div>` : ''}
     </div>
   </body>

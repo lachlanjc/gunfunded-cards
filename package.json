@@ -2,23 +2,23 @@
   "name": "ima-cards",
   "version": "1.0.0",
   "description": "Generate Open Graph images for @lachlanjc/ima",
-  "main": "dist/card.js",
-  "private": true,
-  "scripts": {
-    "start": "node public/dist/card.js",
-    "build": "tsc",
-    "now-build": "tsc",
-    "watch": "tsc --watch"
+  "engines": {
+    "node": "10.x"
   },
-  "author": "lachlanjc <lachlan@hackclub.com>",
-  "repository": "github:lachlanjc/ima-cards",
+  "scripts": {
+    "build": "tsc -p api/tsconfig.json && tsc -p web/tsconfig.json"
+  },
   "license": "MIT",
   "dependencies": {
-    "chrome-aws-lambda": "^2.0.0",
-    "puppeteer-core": "^2.0.0"
+    "chrome-aws-lambda": "1.20.2",
+    "marked": "0.7.0",
+    "puppeteer-core": "1.20.0",
+    "twemoji": "11.3.0"
   },
   "devDependencies": {
-    "@types/puppeteer-core": "^1.9.0",
-    "typescript": "^3.6.4"
+    "@types/marked": "0.6.5",
+    "@types/puppeteer": "1.20.2",
+    "@types/puppeteer-core": "1.9.0",
+    "typescript": "3.6.4"
   }
 }
