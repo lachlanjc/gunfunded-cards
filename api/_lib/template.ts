@@ -155,7 +155,7 @@ export function getHtml(parsedReq: ParsedRequest) {
         md ? marked(text) : sanitizeHtml(text)
       )}</div>
       ${
-        caption && caption.length > 0
+        caption != undefined
           ? `<div class="caption">${emojify(sanitizeHtml(caption))}</div>`
           : ''
       }
