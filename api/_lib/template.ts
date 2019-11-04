@@ -77,7 +77,7 @@ function getCss(theme: string, fontSize: string) {
     }
     .nyu {
       color: ${theme === 'dark' ? '#c975ff' : '#57068c'};
-      font-weight: bold;
+      font-weight: 700;
       font-size: 100px;
       padding-left: .25em;
     }
@@ -91,8 +91,8 @@ function getCss(theme: string, fontSize: string) {
       background-repeat: no-repeat;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 50px 100px 45px;
-      font-weight: bold;
+      margin: 100px 50px 25px;
+      font-weight: 700;
       line-height: 0.875;
       letter-spacing: -.06em;
     }
@@ -101,10 +101,11 @@ function getCss(theme: string, fontSize: string) {
       margin: 0;
     }
 
-    .metadata {
+    .caption {
       font-size: ${Number(sanitizeHtml(fontSize).match(/\d+/)) * 0.375}px;
       text-transform: uppercase;
       color: #7a8c97;
+      font-weight: 400;
       letter-spacing: 0;
     }
     
@@ -123,14 +124,14 @@ function getCss(theme: string, fontSize: string) {
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-  const { text, theme, md, fontSize, images, metadata } = parsedReq
+  const { text, theme, md, fontSize, images, caption } = parsedReq
   return `<!DOCTYPE html>
   <html>
   <meta charset="utf-8">
   <title>Generated Image</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-      ${getCss(theme, fontSize)}
+    ${getCss(theme, fontSize)}
   </style>
   <link rel="stylesheet" href="http://assets.lachlanjc.me/bf566c6457ac/gotham.css" />
   <body>
@@ -150,8 +151,10 @@ export function getHtml(parsedReq: ParsedRequest) {
         </div>`
           : ''
       }
-      <div class="heading">${emojify(md ? marked(text) : sanitizeHtml(text))}
-      ${metadata != undefined ? `<div class="metadata">${metadata}</div>` : ''}
+      <div class="heading">${emojify(
+        md ? marked(text) : sanitizeHtml(text)
+      )}</div>
+      <div class="caption">${emojify(sanitizeHtml(caption))}</div>
     </div>
   </body>
 </html>`
