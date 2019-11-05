@@ -91,7 +91,8 @@ function getCss(theme: string, fontSize: string) {
       background-repeat: no-repeat;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 100px 50px 25px;
+      margin: 100px 50px 0;
+      padding-bottom: 25px;
       font-weight: 700;
       line-height: 0.875;
       letter-spacing: -.06em;
