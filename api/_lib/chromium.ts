@@ -1,6 +1,6 @@
 import { launch, Page } from 'puppeteer-core'
 import { getOptions } from './options'
-import { FileType } from './types'
+import { FileType, Variant } from './types'
 let _page: Page | null
 
 async function getPage(isDev: boolean) {
@@ -16,10 +16,15 @@ async function getPage(isDev: boolean) {
 export async function getScreenshot(
   url: string,
   type: FileType,
+  variant: Variant,
   isDev: boolean
 ) {
+  const sizes = {
+    story: { width: 1024, height: 1820 },
+    card: { width: 2048, height: 1024 }
+  }
   const page = await getPage(isDev)
-  await page.setViewport({ width: 2048, height: 1170 })
+  await page.setViewport(sizes[variant])
   await page.goto(url)
   const file = await page.screenshot({ type })
   return file

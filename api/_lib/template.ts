@@ -1,165 +1,196 @@
-import marked from 'marked'
-import { sanitizeHtml } from './sanitizer'
-import { ParsedRequest } from './types'
-const twemoji = require('twemoji')
-const twOptions = { folder: 'svg', ext: '.svg' }
-const emojify = (text: string) => twemoji.parse(text, twOptions)
+import { ParsedRequest, Variant } from './types'
+const records = require(`${__dirname}/../../records.json`)
+const { readFileSync } = require('fs')
 
-function getCss(theme: string, fontSize: string) {
-  let background = '#ffffff'
-  let radial = '#dde1e4'
+const fonts = `${__dirname}/../../_fonts`
+const rglr = readFileSync(`${fonts}/Inter-Regular.woff2`).toString('base64')
+const bold = readFileSync(`${fonts}/Inter-Bold.woff2`).toString('base64')
+const blck = readFileSync(`${fonts}/Inter-Black.woff2`).toString('base64')
 
-  if (theme === 'dark') {
-    background = '#17171d'
-    radial = '#3c4858'
-  }
+const colors = {
+  darker: '#121217',
+  dark: '#17171d',
+  darkless: '#252429',
+  black: '#1f2d3d',
+  steel: '#273444',
+  slate: '#3c4858',
+  muted: '#8492a6',
+  smoke: '#e0e6ed',
+  snow: '#f9fafc',
+  white: '#ffffff',
+  red: '#ec3750',
+  orange: '#ff8c37',
+  yellow: '#f1c40f',
+  green: '#33d6a6',
+  cyan: '#5bc0de',
+  blue: '#338eda'
+}
+
+function getCss(variant: Variant) {
+  let background = colors.snow
+  variant
 
   return `
+    @font-face {
+      font-family: 'Inter';
+      font-weight: 400;
+      src: url(data:font/woff2;charset=utf-8;base64,${rglr}) format('woff2');
+    }
+    @font-face {
+      font-family: 'Inter';
+      font-weight: 700;
+      src: url(data:font/woff2;charset=utf-8;base64,${bold}) format('woff2');
+    }
+    @font-face {
+      font-family: 'Inter';
+      font-weight: 900;
+      src: url(data:font/woff2;charset=utf-8;base64,${blck}) format('woff2');
+    }
+
     body {
-      background: ${background};
-      background-image: radial-gradient(circle at 25px 25px, ${radial} 3%, transparent 0%),   
-        radial-gradient(circle at 75px 75px, ${radial} 3%, transparent 0%);
-      background-size: 100px 100px;
+      margin: 0;
       height: 100vh;
-      display: flex;
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Gotham A', 'Gotham B', sans-serif;
-      font-size: ${sanitizeHtml(fontSize)};
-      font-style: normal;
-      letter-spacing: -.01em;
-    }
-
-    code {
-      font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, sans-serif;
-      font-size: .875em;
-      white-space: pre-wrap;
-    }
-
-    code:before, code:after {
-      content: '\`';
-    }
-
-    .img-wrapper {
-      display: flex;
-      align-items: center;
-      align-content: center;
-      justify-content: center;
-    }
-
-    .logo {
-      width: 275px;
-      height: 275px;
-    }
-
-    .plus {
-      color: #7a8c97;
+      background-color: ${background};
+      font-family: 'Inter', sans-serif;
       font-size: 100px;
-      padding: 0 50px;
+      font-weight: 400;
+      display: flex;
+      flex-direction: column;
+      ${variant === 'story' && 'text-align: center;'}
     }
 
-    .spacer {
-      margin: 100px 150px 150px;
+    .container {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      ${
+        variant === 'story'
+          ? `
+          justify-content: center;
+          flex-direction: column;
+          text-align: center;
+        `
+          : `
+          padding: 0 125px;
+          text-align: left;
+      `
+      }
     }
 
     .brand {
-      font-size: 90px;
-      padding: 50px;
-      text-align: center;
+      background-color: ${colors.red};
+      color: ${colors.white};
+      font-size: 75px;
+      padding: 50px ${variant === 'story' ? 0 : 125}px;
+      width: 100%;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    
+    .heading-detail {
+      color: ${colors.muted};
+      font-weight: 700;
+      font-size: 75px;
+    }
+    .heading {
+      margin: 25px 0 50px;
+      font-size: 175px;
+      font-weight: 900;
+      line-height: 0.875;
+      letter-spacing: -.01em;
+    }
+    
+    .avatar-wrapper {
+      position: relative;
+      ${variant === 'story' ? 'margin-bottom: 35px;' : 'margin-right: 100px;'}
+    }
+    .avatar {
+      width: 350px;
+      height: 350px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 175px;
+    }
+    .avatar-badge {
+      display: inline-block;
+      width: 125px;
+      height: 125px;
+      border-radius: 75px;
       position: absolute;
       top: 0;
-      width: 100%;
-      color: #7a8c97;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      left: 0;
+      color: ${colors.white};
+      font-size: 75px;
+      font-weight: 700;
+      line-height: 125px;
+      font-weight: black;
+      text-align: center;
     }
-    .nyu {
-      color: ${theme === 'dark' ? '#c975ff' : '#57068c'};
+    .bg-rep { background-color: ${colors.red}; }
+    .bg-dem { background-color: ${colors.blue}; }
+
+    .funding {
       font-weight: 700;
       font-size: 100px;
-      padding-left: .25em;
-    }
-    
-    .heading {
-      ${
-        theme === 'dark'
-          ? 'background-image: linear-gradient(to bottom right, #c975ff, #8900e1);'
-          : 'background-image: linear-gradient(to bottom right, #8900e1 12.5%, #57068c);'
-      };
-      background-repeat: no-repeat;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin: 100px 50px 0;
-      padding-bottom: 25px;
-      font-weight: 700;
-      line-height: 0.875;
-      letter-spacing: -.06em;
-    }
-
-    .heading * {
-      margin: 0;
-    }
-
-    .caption {
-      font-size: ${Number(sanitizeHtml(fontSize).match(/\d+/)) * 0.375}px;
       text-transform: uppercase;
-      color: #7a8c97;
-      font-weight: 400;
-      letter-spacing: 0;
+      width: 100%;
+      color: ${colors.white};
+      text-align: ${variant === 'story' ? 'center' : 'left'};
+      padding: 50px ${variant === 'story' ? '0px' : '50px 50px 575px'};
     }
-    
-    .avatar {
-      width: 125px;
-      border-radius: 125px;
-      margin: 0 50px;
-    }
-    
-    .emoji {
-      height: 1em;
-      width: 1em;
-      margin: 0 .05em 0 .1em;
-      vertical-align: -0.1em;
-    }`
+  `
 }
 
+const getYear = (date: string) => date.slice(0, 4)
+const withCommas = (num: number | string) =>
+  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
 export function getHtml(parsedReq: ParsedRequest) {
-  const { text, theme, md, fontSize, images, caption } = parsedReq
+  const { id, variant } = parsedReq
+  const p = records.find((r: { id: string }) => r.id === id)
   return `<!DOCTYPE html>
   <html>
   <meta charset="utf-8">
   <title>Generated Image</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    ${getCss(theme, fontSize)}
+    ${getCss(variant)}
   </style>
-  <link rel="stylesheet" href="http://assets.lachlanjc.me/bf566c6457ac/gotham.css" />
   <body>
     <div class="brand">
-      <img class="avatar" src="https://github.com/lachlanjc.png">
-      @lachlanjc @ <span class="nyu">IMA</span>
+      ${variant === 'story' ? '@gunfunded' : 'gunfunded.com'}
     </div>
-    <div class="spacer">
-      ${
-        images.length > 0
-          ? `<div class="img-wrapper">
-          <img class="logo" src="${sanitizeHtml(images[0])}" />
-          ${images.slice(1).map(img => {
-            return `<div class="plus">+</div>
-            <img class="logo" src="${sanitizeHtml(img)}" />`
-          })}
-        </div>`
-          : ''
-      }
-      <div class="heading">${emojify(
-        md ? marked(text) : sanitizeHtml(text)
-      )}</div>
-      ${
-        caption !== 'undefined'
-          ? `<div class="caption">${emojify(sanitizeHtml(caption))}</div>`
-          : ''
-      }
+    <div class="container">
+      <div class="avatar-wrapper">
+        <div class="avatar-badge bg-${p.party
+          .toLowerCase()
+          .slice(0, 3)}">${p.party.slice(0, 1)}</div>
+        <img
+          class="avatar"
+          src="https://avatars.gunfunded.com/${p.ids.bioguide}.jpg">
+      </div>
+      <div>
+        <div class="heading-detail">
+          ${p.role === 'rep' ? p.id : p.state}
+          ${p.role === 'sen' ? 'Senator' : 'Representative'}
+        </div>
+        <div class="heading">
+          ${p.name.full}
+        </div>
+        ${
+          variant === 'story'
+            ? `
+            <div class="heading-detail">
+              Current term ${getYear(p.termStart)}–${getYear(p.termEnd)}
+            </div>
+            `
+            : ''
+        }
+      </div>
+    </div>
+    <div class="funding bg-${p.gunRightsTotal > 0 ? 'rep' : 'dem'}">
+      <span>$${withCommas(p.gunRightsTotal)}</span> in&nbsp;gun&nbsp;funding
     </div>
   </body>
 </html>`

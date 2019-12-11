@@ -19,10 +19,10 @@ export default async function handler(
       res.end(html)
       return
     }
-    const { text, fileType } = parsedReq
-    const filePath = await writeTempFile(text, html)
+    const { id, variant, fileType } = parsedReq
+    const filePath = await writeTempFile(id, html)
     const fileUrl = pathToFileURL(filePath)
-    const file = await getScreenshot(fileUrl, fileType, isDev)
+    const file = await getScreenshot(fileUrl, fileType, variant, isDev)
     res.statusCode = 200
     res.setHeader('Content-Type', `image/${fileType}`)
     res.setHeader(

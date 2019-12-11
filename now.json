@@ -1,7 +1,20 @@
 {
-  "name": "ima-cards",
+  "name": "gunfunded-cards",
   "regions": ["all"],
   "public": true,
   "version": 2,
-  "routes": [{ "handle": "filesystem" }, { "src": "/(.+)", "dest": "/api" }]
+  "functions": { "api/**": { "memory": 3008 } },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "https://github.com/lachlanjc/gunfunded-cards"
+    },
+    {
+      "source": "/(.+)",
+      "destination": "/api",
+      "headers": {
+        "cache-control": "s-maxage=43200"
+      }
+    }
+  ]
 }

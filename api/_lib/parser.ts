@@ -2,17 +2,18 @@ import { IncomingMessage } from 'http'
 import { parse } from 'url'
 import { ParsedRequest } from './types'
 
-export function parseRequest(req: IncomingMessage) {
+export function parseRequest(req: IncomingMessage): ParsedRequest {
   console.log('HTTP ' + req.url)
   const { pathname = '/', query = {} } = parse(req.url || '', true)
-  const { fontSize, images, theme, md, caption } = query
+  const { variant, caption } = query
 
-  if (Array.isArray(fontSize)) {
-    throw new Error('Expected a single fontSize')
+  const empty: ParsedRequest = {
+    fileType: 'png',
+    id: 'PA-15',
+    variant: 'card',
+    caption: ''
   }
-  if (Array.isArray(theme)) {
-    throw new Error('Expected a single theme')
-  }
+  if (!pathname) return empty
 
   const arr = pathname.slice(1).split('.')
   let extension = ''
@@ -28,21 +29,9 @@ export function parseRequest(req: IncomingMessage) {
 
   const parsedRequest: ParsedRequest = {
     fileType: extension === 'jpeg' ? extension : 'png',
-    text: decodeURIComponent(text),
-    theme: theme === 'dark' ? 'dark' : 'light',
-    md: md === '1' || md === 'true',
-    fontSize: fontSize || '200px',
-    caption: decodeURIComponent(caption as string),
-    images: getArray(images)
+    id: decodeURIComponent(text),
+    variant: variant === 'story' ? 'story' : 'card',
+    caption: decodeURIComponent(caption as string)
   }
-  parsedRequest.images = getDefaultImages(parsedRequest.images)
   return parsedRequest
-}
-
-function getArray(stringOrArray: string[] | string): string[] {
-  return Array.isArray(stringOrArray) ? stringOrArray : [stringOrArray]
-}
-
-function getDefaultImages(images: string[]) {
-  return images.length > 0 && images[0] ? images : []
 }
