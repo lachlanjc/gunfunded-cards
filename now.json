@@ -11,10 +11,7 @@
     },
     {
       "source": "/(.+)",
-      "destination": "/api",
-      "headers": {
-        "cache-control": "s-maxage=43200"
-      }
+      "destination": "/api"
     }
   ]
 }
