@@ -146,9 +146,18 @@ const getYear = (date: string) => date.slice(0, 4)
 const withCommas = (num: number | string) =>
   num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
+type Profile = {
+  id: string,
+  fundingType: 'rights' | 'control',
+  gunRightsTotal: number,
+  gunControlTotal: number
+}
+
 export function getHtml(parsedReq: ParsedRequest) {
   const { id, variant } = parsedReq
-  const p = records.find((r: { id: string }) => r.id === id)
+  const p = records.find((r: Profile) => r.id === id)
+  const { fundingType, gunRightsTotal, gunControlTotal } = p
+  const fundingTotal = fundingType === 'control' ? gunControlTotal : gunRightsTotal
   return `<!DOCTYPE html>
   <html>
   <meta charset="utf-8">
@@ -189,8 +198,8 @@ export function getHtml(parsedReq: ParsedRequest) {
         }
       </div>
     </div>
-    <div class="funding bg-${p.gunRightsTotal > 0 ? 'rep' : 'dem'}">
-      <span>$${withCommas(p.gunRightsTotal)}</span> in&nbsp;gun&nbsp;funding
+    <div class="funding bg-${gunRightsTotal > 0 ? 'rep' : 'dem'}">
+      <span>$${withCommas(fundingTotal)}</span> in&nbsp;gun&nbsp;funding
     </div>
   </body>
 </html>`
