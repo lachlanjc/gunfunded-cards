@@ -156,8 +156,7 @@ type Profile = {
 export function getHtml(parsedReq: ParsedRequest) {
   const { id, variant } = parsedReq
   const p = records.find((r: Profile) => r.id === id)
-  const { fundingType, gunRightsTotal, gunControlTotal } = p
-  const fundingTotal = fundingType === 'control' ? gunControlTotal : gunRightsTotal
+  const { gunRightsTotal } = p
   return `<!DOCTYPE html>
   <html>
   <meta charset="utf-8">
@@ -199,7 +198,7 @@ export function getHtml(parsedReq: ParsedRequest) {
       </div>
     </div>
     <div class="funding bg-${gunRightsTotal > 0 ? 'rep' : 'dem'}">
-      <span>$${withCommas(fundingTotal)}</span> in&nbsp;gun&nbsp;funding
+      <span>$${withCommas(gunRightsTotal)}</span> in&nbsp;gun&nbsp;funding
     </div>
   </body>
 </html>`
